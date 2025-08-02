@@ -1,6 +1,20 @@
 let comodoCounter = 0;
 let defeitoCounter = 0;
 let uploadedImages = new Map();
+let templateBinaryContent = null;
+
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const response = await fetch("template_vistoria.docx");
+    if (!response.ok) throw new Error("Erro ao buscar template padrão.");
+    const arrayBuffer = await response.arrayBuffer();
+    templateBinaryContent = arrayBuffer;
+    document.getElementById("templateFileName").textContent =
+      "template_vistoria.docx (padrão)";
+  } catch (err) {
+    console.warn("Template padrão não carregado:", err);
+  }
+});
 
 document
   .getElementById("templateFile")
@@ -268,11 +282,18 @@ document
 
 async function handleFormSubmit() {
   try {
+    let templateBuffer;
     const templateFile = document.getElementById("templateFile").files[0];
-    if (!templateFile) {
-      throw new Error("Por favor, selecione um arquivo template DOCX");
-    }
 
+    if (templateFile) {
+      templateBuffer = await templateFile.arrayBuffer();
+    } else if (templateBinaryContent) {
+      templateBuffer = templateBinaryContent;
+    } else {
+      throw new Error(
+        "Template não encontrado. Por favor, selecione um arquivo."
+      );
+    }
     showStatus("Gerando documento... Por favor, aguarde.");
 
     const dadosVistoria = {
@@ -324,7 +345,6 @@ async function handleFormSubmit() {
       dadosVistoria.comodos.push(comodoData);
     }
 
-    const templateBuffer = await templateFile.arrayBuffer();
     const zip = new PizZip(templateBuffer);
     const imageModule = new window.ImageModule({
       getImage: (tagValue) => {
