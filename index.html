@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Vistoria DOCX</title>
+    <link rel="stylesheet" href="styles/out.css" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <script src="https://unpkg.com/docxtemplater@3.42.0/build/docxtemplater.js"></script>
+    <script src="https://unpkg.com/pizzip@3.0.5/dist/pizzip.min.js"></script>
+    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="/scripts/image-module.js"></script>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center p-4"
+  >
+    <div
+      class="container bg-white rounded-2xl shadow-2xl p-4 md:p-10 max-w-5xl w-full animate-fade-in"
+    >
+      <h1
+        class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent"
+      >
+        <span class="text-white">📋</span> Gerador de Vistoria DOCX
+      </h1>
+      <form id="vistoriaForm" class="gap-6 flex flex-col">
+        <div>
+          <label class="block font-semibold mb-2">Template DOCX:</label>
+          <label
+            class="flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-indigo-400 to-purple-500 text-white rounded-lg px-4 py-2 w-full"
+          >
+            <input
+              type="file"
+              class="hidden"
+              id="templateFile"
+              accept=".docx"
+              required
+              multiple
+            />
+            📁 Escolher Template DOCX
+          </label>
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              const templateFileName =
+                document.getElementById("templateFileName");
+              templateFileName.textContent = "template_vistoria.docx (padrão)";
+            });
+          </script>
+          <div class="text-sm text-gray-500 mt-1" id="templateFileName"></div>
+        </div>
+        <div>
+          <label for="endereco" class="block font-semibold mb-2"
+            >Endereço:</label
+          >
+          <input
+            type="text"
+            id="endereco"
+            value="Rua das Flores, 123, São Paulo, SP"
+            required
+            class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400"
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="proprietario" class="block font-semibold mb-2"
+              >Proprietário:</label
+            >
+            <input
+              type="text"
+              id="proprietario"
+              value="Sr. João da Silva"
+              required
+              class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400"
+            />
+          </div>
+          <div>
+            <label for="cliente" class="block font-semibold mb-2"
+              >Cliente:</label
+            >
+            <input
+              type="text"
+              id="cliente"
+              value="Sr. José da Silva"
+              required
+              class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400"
+            />
+          </div>
+          <div>
+            <label for="data_vistoria" class="block font-semibold mb-2"
+              >Data da Vistoria:</label
+            >
+            <input
+              type="date"
+              id="data_vistoria"
+              required
+              class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400"
+            />
+            <script>
+              document.getElementById("data_vistoria").valueAsDate = new Date();
+            </script>
+          </div>
+          <div>
+            <label for="vistoriador" class="block font-semibold mb-2"
+              >Vistoriador:</label
+            >
+            <input
+              type="text"
+              id="vistoriador"
+              value="Gabriella Sousa Farias"
+              required
+              class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-400"
+            />
+          </div>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+          <h2 class="text-xl font-bold">Cômodos</h2>
+          <button
+            type="button"
+            class="add-button cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg px-4 py-2"
+            onclick="adicionarComodo()"
+          >
+            + Adicionar Cômodo
+          </button>
+        </div>
+        <div id="comodos" class="grid gap-6">
+          <!-- Cômodos serão adicionados aqui dinamicamente -->
+        </div>
+
+        <button
+          type="submit"
+          class="generate-button cursor-pointer w-full py-4 text-lg font-bold rounded-lg bg-gradient-to-r from-green-400 to-green-600 text-white mt-6 hover:from-green-500 hover:to-green-700"
+        >
+          📃 Gerar Documento de Vistoria
+        </button>
+      </form>
+      <div id="status" class=""></div>
+    </div>
+
+    <script src="scripts/script.js"></script>
+  </body>
+</html>
